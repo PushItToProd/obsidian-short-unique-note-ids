@@ -1,6 +1,7 @@
 import * as assert from "node:assert";
 import { toBaseN } from "../shortNoteIds.js";
 
+const BASE2_DIGITS_AB = 'AB';
 const BASE4_DIGITS = '0123';
 const BASE12_DIGITS = '0123456789AB';
 const BASE36_DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -10,6 +11,8 @@ describe("toBaseN", function () {
 		{n: 0, ds: BASE4_DIGITS, expected: '0'},
 		{n: 0, ds: BASE12_DIGITS, expected: '0'},
 		{n: 0, ds: BASE36_DIGITS, expected: '0'},
+
+		{n: 10, ds: BASE2_DIGITS_AB, expected: 'BABA'},
 
 		{n: 3*4, ds: BASE4_DIGITS, expected: '30'},
 		{n: 3*4 + 1, ds: BASE4_DIGITS, expected: '31'},
