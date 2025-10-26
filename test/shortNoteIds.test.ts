@@ -1,12 +1,12 @@
 import * as assert from "node:assert";
-import { toBaseN } from "../shortNoteIds.js";
+import { toBaseN, ShortIdDate, ShortIdParams, BASE36_CHARS } from "../shortNoteIds.js";
 
 const BASE2_DIGITS_AB = 'AB';
 const BASE4_DIGITS = '0123';
 const BASE12_DIGITS = '0123456789AB';
 const BASE36_DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-describe("toBaseN", function () {
+describe("toBaseN", function() {
 	const tests = [
 		{n: 0, ds: BASE4_DIGITS, expected: '0'},
 		{n: 0, ds: BASE12_DIGITS, expected: '0'},
@@ -25,8 +25,58 @@ describe("toBaseN", function () {
 	];
 
 	tests.forEach(({n, ds, expected}) => {
-		it(`correctly converts ${n} to ${expected} with digits ${ds}`, function () {
+		it(`correctly converts ${n} to ${expected} with digits ${ds}`, function() {
 			assert.equal(toBaseN(n, ds), expected);
 		});
 	})
+});
+
+describe("ShortIdDate", function() {
+	const shortIdParams: ShortIdParams = {
+		epochYear: 2025,
+		yearChars: 'ABC',
+		monthChars: BASE36_CHARS,
+		dayChars: BASE36_CHARS,
+	};
+
+	describe("ShortIdDate - 2025-01-01 midnight", function() {
+		const date = new Date(2025, 1, 1, 0, 0, 0, 0);
+		const shortId = new ShortIdDate(shortIdParams, date);
+
+		describe("#year()", function() {
+			it('is "A"', function() {
+				assert.equal(shortId.year(), "A");
+			});
+		});
+
+		describe("#month()", function() {
+			it('is "1"', function() {
+				assert.equal(shortId.month(), "1");
+			});
+		});
+
+		describe("#day()", function() {
+			it('is "1"', function() {
+				assert.equal(shortId.day(), "1");
+			});
+		});
+
+		describe("#datePart()", function() {
+			it('is "A11"', function() {
+				assert.equal(shortId.datePart(), "A11");
+			});
+		})
+	});
+
+	describe("ShortIdDate - 2026-01-01 midnight", function() {
+		const date = new Date(2026, 1, 1, 0, 0, 0, 0);
+		const shortId = new ShortIdDate(shortIdParams, date);
+
+		describe("#year()", function() {
+			it('is "A"', function() {
+				assert.equal(shortId.year(), "B");
+			});
+		});
+	});
+
 });

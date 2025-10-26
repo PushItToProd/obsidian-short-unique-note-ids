@@ -1,3 +1,5 @@
+export const BASE36_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 // toBaseN converts the non-negative integer `n` to a base-`${digits.length}`
 // representation in string form, using the characters in the string `digits` as
 // the digits. For example, toBaseN(10, 'AB') === 'BABA'.
@@ -30,4 +32,42 @@ export function toBaseN(n: number, digits: string): string {
 	}
 
 	return nstr;
+}
+
+export type ShortIdParams = {
+	epochYear: number,
+	yearChars: string,
+	monthChars: string,
+	dayChars: string,
+};
+
+export class ShortIdDate {
+	constructor(public readonly params: ShortIdParams, public readonly date: Date) {
+		if (this._relativeYear() < 0) {
+			throw `the given date is before the epochYear`;
+		}
+	}
+
+	// _relativeYear() returns the year relative to the epoch
+	_relativeYear(): number {
+		return this.date.getFullYear() - this.params.epochYear;
+	}
+
+	// year() returns the year using yearChars
+	year(): string {
+		const year = this._relativeYear();
+		return toBaseN(year, this.params.yearChars);
+	}
+
+	month(): string {
+		return toBaseN(this.date.getMonth(), this.params.monthChars);
+	}
+
+	day(): string {
+		return toBaseN(this.date.getDate(), this.params.dayChars);
+	}
+
+	datePart(): string {
+		return `${this.year()}${this.month()}${this.day()}`;
+	}
 }
