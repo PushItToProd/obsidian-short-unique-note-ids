@@ -59,8 +59,14 @@ export class ShortIdDate {
     return toBaseN(year, this.params.yearChars);
   }
 
+  // JavaScript's date type uses zero-indexed months, but we want them to be
+  // one-indexed to match the year and day.
+  get monthNumber(): number {
+    return this.date.getMonth() + 1;
+  }
+
   month(): string {
-    return toBaseN(this.date.getMonth(), this.params.monthChars);
+    return toBaseN(this.monthNumber, this.params.monthChars);
   }
 
   day(): string {

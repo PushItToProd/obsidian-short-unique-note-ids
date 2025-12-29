@@ -68,8 +68,37 @@ describe("ShortIdDate", function() {
     });
   });
 
+  describe("ShortIdDate - 2026-06-15 12:00", function() {
+    const date = new Date(2026, 5, 15, 12, 0, 0, 0);
+    const shortId = new ShortIdDate(shortIdParams, date);
+
+    describe("#year()", function() {
+      it('is "B"', function() {
+        assert.equal(shortId.year(), "B");
+      });
+    });
+
+    describe("#month()", function() {
+      it('is "6"', function() {
+        assert.equal(shortId.month(), "6");
+      });
+    });
+
+    describe("#day()", function() {
+      it('is "F"', function() {
+        assert.equal(shortId.day(), "F");
+      });
+    });
+
+    describe("#datePart()", function() {
+      it('is "B6F"', function() {
+        assert.equal(shortId.datePart(), "B6F");
+      });
+    });
+  });
+
   describe("ShortIdDate - 2026-12-31 23:59", function() {
-    const date = new Date(2026, 12, 31, 23, 59, 59, 999);
+    const date = new Date(2026, 11, 31, 23, 59, 59, 999);
     const shortId = new ShortIdDate(shortIdParams, date);
 
     describe("#year()", function() {
@@ -95,7 +124,5 @@ describe("ShortIdDate", function() {
         assert.equal(shortId.datePart(), "BCV");
       });
     });
-
   });
-
 });
