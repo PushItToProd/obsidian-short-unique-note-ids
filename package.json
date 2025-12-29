@@ -12,7 +12,7 @@
 	},
 	"keywords": [],
 	"author": "pushittoprod",
-	"license": "MIT",
+	"license": "LGPL-3.0-or-later",
 	"devDependencies": {
 		"@types/mocha": "^10.0.10",
 		"@types/node": "^16.11.6",
