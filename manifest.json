@@ -1,11 +1,11 @@
 {
-	"id": "short-unique-note-ids",
-	"name": "Short unique note IDs",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Unique notes with short, hand-writable IDs",
-	"author": "pushittoprod",
-	"authorUrl": "https://github.com/pushittoprod",
-	"fundingUrl": "",
-	"isDesktopOnly": false
+  "id": "short-unique-note-ids",
+  "name": "Short unique note IDs",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Unique notes with short, hand-writable IDs",
+  "author": "pushittoprod",
+  "authorUrl": "https://github.com/pushittoprod",
+  "fundingUrl": "",
+  "isDesktopOnly": false
 }
