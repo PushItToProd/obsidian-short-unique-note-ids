@@ -112,7 +112,11 @@ export class ShortIdDate {
     return toBaseN(this.date.getHours(), this.params.hourChars);
   }
 
+  minute(): string {
+    return String(this.date.getMinutes()).padStart(2, '0');
+  }
+
   timePart(): string {
-    throw `not implemented`;
+    return `${this.hour()}${this.minute()}`;
   }
 }

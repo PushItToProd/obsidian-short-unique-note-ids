@@ -49,16 +49,20 @@ describe("base conversion", function() {
 });
 
 class _ShortIdExpected {
-
   constructor(
     public readonly year: string,
     public readonly month: string,
     public readonly day: string,
     public readonly hour: string,
+    public readonly minute: string,
   ) {}
 
   public get datePart(): string {
     return this.year + this.month + this.day;
+  }
+
+  public get timePart(): string {
+    return this.hour + this.minute;
   }
 };
 
@@ -94,6 +98,18 @@ function testShortIdDate(shortIdParams: ShortIdParams, date: Date, expected: _Sh
       assert.equal(shortId.hour(), expected.hour);
     });
   });
+
+  describe("#minute()", function() {
+    it(`is "${expected.minute}"`, function() {
+      assert.equal(shortId.minute(), expected.minute);
+    });
+  });
+
+  describe("#timePart()", function() {
+    it(`is "${expected.timePart}"`, function() {
+      assert.equal(shortId.timePart(), expected.timePart);
+    });
+  });
 }
 
 describe("ShortIdDate", function() {
@@ -109,17 +125,17 @@ describe("ShortIdDate", function() {
     {
       desc: "2025-01-01 midnight",
       date: new Date(2025, 0, 1, 0, 0, 0, 0),
-      expected: new _ShortIdExpected("A", "1", "1", "A"),
+      expected: new _ShortIdExpected("A", "1", "1", "A", "00"),
     },
     {
-      desc: "2026-06-15 12:00",
-      date: new Date(2026, 5, 15, 12, 0, 0, 0),
-      expected: new _ShortIdExpected("B", "6", "F", "M"),
+      desc: "2026-06-15 12:31",
+      date: new Date(2026, 5, 15, 12, 31, 12, 345),
+      expected: new _ShortIdExpected("B", "6", "F", "M", "31"),
     },
     {
       desc: "2026-12-31 23:59",
       date: new Date(2026, 11, 31, 23, 59, 59, 999),
-      expected: new _ShortIdExpected("B", "C", "V", "X"),
+      expected: new _ShortIdExpected("B", "C", "V", "X", "59"),
     },
   ];
 
