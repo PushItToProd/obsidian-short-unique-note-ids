@@ -105,21 +105,25 @@ describe("ShortIdDate", function() {
     hourChars: BASE26_DIGITS,
   };
 
-  describe("ShortIdDate - 2025-01-01 midnight", function() {
-    const date = new Date(2025, 0, 1, 0, 0, 0, 0);
+  const tests = [
+    {
+      desc: "2025-01-01 midnight",
+      date: new Date(2025, 0, 1, 0, 0, 0, 0),
+      expected: new _ShortIdExpected("A", "1", "1", "A"),
+    },
+    {
+      desc: "2026-06-15 12:00",
+      date: new Date(2026, 5, 15, 12, 0, 0, 0),
+      expected: new _ShortIdExpected("B", "6", "F", "M"),
+    },
+    {
+      desc: "2026-12-31 23:59",
+      date: new Date(2026, 11, 31, 23, 59, 59, 999),
+      expected: new _ShortIdExpected("B", "C", "V", "X"),
+    },
+  ];
 
-    testShortIdDate(shortIdParams, date, new _ShortIdExpected("A", "1", "1", "A"));
-  });
-
-  describe("ShortIdDate - 2026-06-15 12:00", function() {
-    const date = new Date(2026, 5, 15, 12, 0, 0, 0);
-
-    testShortIdDate(shortIdParams, date, new _ShortIdExpected("B", "6", "F", "M"));
-  });
-
-  describe("ShortIdDate - 2026-12-31 23:59", function() {
-    const date = new Date(2026, 11, 31, 23, 59, 59, 999);
-
-    testShortIdDate(shortIdParams, date, new _ShortIdExpected("B", "C", "V", "X"));
-  });
+  tests.forEach(({desc, date, expected}) => describe(desc, function() {
+    testShortIdDate(shortIdParams, date, expected);
+  }))
 });
