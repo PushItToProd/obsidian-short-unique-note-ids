@@ -69,6 +69,7 @@ export type ShortIdParams = {
   yearChars: string,
   monthChars: string,
   dayChars: string,
+  hourChars: string,
 };
 
 export class ShortIdDate {
@@ -105,5 +106,13 @@ export class ShortIdDate {
 
   datePart(): string {
     return `${this.year()}${this.month()}${this.day()}`;
+  }
+
+  hour(): string {
+    return toBaseN(this.date.getHours(), this.params.hourChars);
+  }
+
+  timePart(): string {
+    throw `not implemented`;
   }
 }

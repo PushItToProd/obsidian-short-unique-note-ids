@@ -4,8 +4,8 @@ import { toBaseN, fromBaseN, ShortIdDate, ShortIdParams } from "../shortNoteIds.
 const BASE2_DIGITS_AB = 'AB';
 const BASE4_DIGITS = '0123';
 const BASE12_DIGITS = '0123456789AB';
-const BASE36_DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const BASE26_DIGITS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const BASE36_DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 describe("base conversion", function() {
   const tests = [
@@ -48,98 +48,78 @@ describe("base conversion", function() {
   })
 });
 
+class _ShortIdExpected {
+
+  constructor(
+    public readonly year: string,
+    public readonly month: string,
+    public readonly day: string,
+    public readonly hour: string,
+  ) {}
+
+  public get datePart(): string {
+    return this.year + this.month + this.day;
+  }
+};
+
+function testShortIdDate(shortIdParams: ShortIdParams, date: Date, expected: _ShortIdExpected) {
+  const shortId = new ShortIdDate(shortIdParams, date);
+
+  describe("#year()", function() {
+    it(`is "${expected.year}"`, function() {
+      assert.equal(shortId.year(), expected.year);
+    });
+  });
+
+  describe("#month()", function() {
+    it(`is "${expected.month}"`, function() {
+      assert.equal(shortId.month(), expected.month);
+    });
+  });
+
+  describe("#day()", function() {
+    it(`is "${expected.day}"`, function() {
+      assert.equal(shortId.day(), expected.day);
+    });
+  });
+
+  describe("#datePart()", function() {
+    it(`is "${expected.datePart}"`, function() {
+      assert.equal(shortId.datePart(), expected.datePart);
+    });
+  });
+
+  describe("#hour()", function() {
+    it(`is "${expected.hour}"`, function() {
+      assert.equal(shortId.hour(), expected.hour);
+    });
+  });
+}
+
 describe("ShortIdDate", function() {
   const shortIdParams: ShortIdParams = {
     epochYear: 2025,
     yearChars: BASE26_DIGITS,
     monthChars: BASE36_DIGITS,
     dayChars: BASE36_DIGITS,
+    hourChars: BASE26_DIGITS,
   };
 
   describe("ShortIdDate - 2025-01-01 midnight", function() {
     const date = new Date(2025, 0, 1, 0, 0, 0, 0);
-    const shortId = new ShortIdDate(shortIdParams, date);
 
-    describe("#year()", function() {
-      it('is "A"', function() {
-        assert.equal(shortId.year(), "A");
-      });
-    });
-
-    describe("#month()", function() {
-      it('is "1"', function() {
-        assert.equal(shortId.month(), "1");
-      });
-    });
-
-    describe("#day()", function() {
-      it('is "1"', function() {
-        assert.equal(shortId.day(), "1");
-      });
-    });
-
-    describe("#datePart()", function() {
-      it('is "A11"', function() {
-        assert.equal(shortId.datePart(), "A11");
-      });
-    });
+    testShortIdDate(shortIdParams, date, new _ShortIdExpected("A", "1", "1", "A"));
   });
 
   describe("ShortIdDate - 2026-06-15 12:00", function() {
     const date = new Date(2026, 5, 15, 12, 0, 0, 0);
-    const shortId = new ShortIdDate(shortIdParams, date);
 
-    describe("#year()", function() {
-      it('is "B"', function() {
-        assert.equal(shortId.year(), "B");
-      });
-    });
-
-    describe("#month()", function() {
-      it('is "6"', function() {
-        assert.equal(shortId.month(), "6");
-      });
-    });
-
-    describe("#day()", function() {
-      it('is "F"', function() {
-        assert.equal(shortId.day(), "F");
-      });
-    });
-
-    describe("#datePart()", function() {
-      it('is "B6F"', function() {
-        assert.equal(shortId.datePart(), "B6F");
-      });
-    });
+    testShortIdDate(shortIdParams, date, new _ShortIdExpected("B", "6", "F", "M"));
   });
 
   describe("ShortIdDate - 2026-12-31 23:59", function() {
     const date = new Date(2026, 11, 31, 23, 59, 59, 999);
-    const shortId = new ShortIdDate(shortIdParams, date);
 
-    describe("#year()", function() {
-      it('is "B"', function() {
-        assert.equal(shortId.year(), "B");
-      });
-    });
-
-    describe("#month()", function() {
-      it('is "C"', function() {
-        assert.equal(shortId.month(), "C");
-      });
-    });
-
-    describe("#day()", function() {
-      it('is "V"', function() {
-        assert.equal(shortId.day(), "V");
-      });
-    });
-
-    describe("#datePart()", function() {
-      it('is "BCV"', function() {
-        assert.equal(shortId.datePart(), "BCV");
-      });
-    });
+    testShortIdDate(shortIdParams, date, new _ShortIdExpected("B", "C", "V", "X"));
   });
 });
