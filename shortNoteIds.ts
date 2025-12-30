@@ -1,15 +1,15 @@
 export const BASE36_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-// toBaseN converts the non-negative integer `n` to a base-`${digits.length}`
-// representation in string form, using the characters in the string `digits` as
-// the digits. For example, toBaseN(10, 'AB') === 'BABA'.
+// toBaseN converts the non-negative integer `n` to a base-`${numerals.length}`
+// representation in string form, using the characters in the string `numerals`.
+// For example, toBaseN(10, 'AB') === 'BABA'.
 //
 // Caveats:
 // - Negative numbers aren't supported.
 // - Non-integers aren't supported.
 // - `digits` must be at least 2 characters long.
 // - We assume that each character in `digits` is unique.
-export function toBaseN(n: number, digits: string): string {
+export function toBaseN(n: number, numerals: string): string {
   if (n < 0) {
     throw `negative numbers are not supported`;
   }
@@ -17,21 +17,51 @@ export function toBaseN(n: number, digits: string): string {
     throw `non-integers are not supported`;
   }
 
-  const base = digits.length;
+  const base = numerals.length;
   if (base < 2) {
-    throw `toBaseN() got invalid digit string: ${JSON.stringify(digits)}`;
+    throw `toBaseN() got invalid numerals string: ${JSON.stringify(numerals)}`;
   }
 
-  if (n == 0) return digits[0];
+  if (n == 0) return numerals[0];
 
   let nstr = '';
   while (n > 0) {
-    const digit = digits[n % base];
+    const digit = numerals[n % base];
     nstr = digit + nstr;
     n = Math.floor(n / base);
   }
 
   return nstr;
+}
+
+// fromBaseN is the inverse of toBaseN, i.e. it converts the string `nstr` from
+// a `base-${numerals.length}` representation using the characters in `numerals`
+// to a number.
+export function fromBaseN(nstr: string, numerals: string): number {
+  const base = numerals.length;
+  if (base < 2) {
+    throw `fromBaseN() got invalid numerals string: ${JSON.stringify(numerals)}`;
+  }
+
+  // build a map of numerals to their values. e.g. if numerals='ABC', then we'll
+  // have numeralsMap {A: 0, B: 1, C: 2}
+  const numeralsMap: Record<string, number> = {};
+  for (let i = 0, numeral = numerals[i]; i < numerals.length; numeral = numerals[++i]) {
+    numeralsMap[numeral] = i;
+  }
+
+  const nlen = nstr.length;
+
+  // calculate the value of nstr
+  let n = 0;
+  for (let i = 0, digit = nstr[i]; i < nstr.length; digit = nstr[++i]) {
+    const placeVal = base ** (nlen - i - 1);
+    if (!(digit in numeralsMap)) {
+      throw new Error(`invalid numeral: ${digit} (expected one of ${JSON.stringify(numerals)})`);
+    }
+    n += numeralsMap[digit] * placeVal;
+  }
+  return n;
 }
 
 export type ShortIdParams = {

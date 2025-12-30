@@ -1,5 +1,5 @@
 import * as assert from "node:assert";
-import { toBaseN, ShortIdDate, ShortIdParams } from "../shortNoteIds.js";
+import { toBaseN, fromBaseN, ShortIdDate, ShortIdParams } from "../shortNoteIds.js";
 
 const BASE2_DIGITS_AB = 'AB';
 const BASE4_DIGITS = '0123';
@@ -7,28 +7,44 @@ const BASE12_DIGITS = '0123456789AB';
 const BASE36_DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const BASE26_DIGITS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-describe("toBaseN", function() {
+describe("base conversion", function() {
   const tests = [
-    {n: 0, ds: BASE4_DIGITS, expected: '0'},
-    {n: 0, ds: BASE12_DIGITS, expected: '0'},
-    {n: 0, ds: BASE36_DIGITS, expected: '0'},
+    {n: 0, numerals: BASE4_DIGITS, expected: '0'},
+    {n: 0, numerals: BASE12_DIGITS, expected: '0'},
+    {n: 0, numerals: BASE36_DIGITS, expected: '0'},
 
-    {n: 10, ds: BASE2_DIGITS_AB, expected: 'BABA'},
+    {n: 10, numerals: BASE2_DIGITS_AB, expected: 'BABA'},
 
-    {n: 3*4, ds: BASE4_DIGITS, expected: '30'},
-    {n: 3*4 + 1, ds: BASE4_DIGITS, expected: '31'},
+    {n: 3*4, numerals: BASE4_DIGITS, expected: '30'},
+    {n: 3*4 + 1, numerals: BASE4_DIGITS, expected: '31'},
 
-    {n: 10*12, ds: BASE12_DIGITS, expected: 'A0'},
-    {n: 10*12+11, ds: BASE12_DIGITS, expected: 'AB'},
+    {n: 10*12, numerals: BASE12_DIGITS, expected: 'A0'},
+    {n: 10*12+11, numerals: BASE12_DIGITS, expected: 'AB'},
 
-    {n: 1*(36**2)+2*36+1, ds: BASE36_DIGITS, expected: '121'},
-    {n: 5*(36**2)+11*36+7, ds: BASE36_DIGITS, expected: '5B7'},
+    {n: 1*(36**2)+2*36+1, numerals: BASE36_DIGITS, expected: '121'},
+    {n: 5*(36**2)+11*36+7, numerals: BASE36_DIGITS, expected: '5B7'},
   ];
 
-  tests.forEach(({n, ds, expected}) => {
-    it(`correctly converts ${n} to ${expected} with digits ${ds}`, function() {
-      assert.equal(toBaseN(n, ds), expected);
+  describe("toBaseN", function() {
+    tests.forEach(({n, numerals, expected}) => {
+      it(`correctly converts ${n} to ${expected} with numerals ${numerals}`, function() {
+        assert.equal(toBaseN(n, numerals), expected);
+      });
+    })
+  });
+
+  describe("fromBaseN", function() {
+    it(`raises an error on invalid characters`, function() {
+      assert.throws(() => {
+        fromBaseN("BA1B", BASE2_DIGITS_AB);
+      }, /invalid numeral.*1/);
     });
+
+    tests.forEach(({n: expected, numerals, expected: n}) => {
+      it(`correctly converts ${n} to ${expected} with numerals ${numerals}`, function() {
+        assert.equal(fromBaseN(n, numerals), expected);
+      });
+    })
   })
 });
 
