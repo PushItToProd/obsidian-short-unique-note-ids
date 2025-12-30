@@ -5,6 +5,7 @@ const BASE2_DIGITS_AB = 'AB';
 const BASE4_DIGITS = '0123';
 const BASE12_DIGITS = '0123456789AB';
 const BASE36_DIGITS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const BASE26_DIGITS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 describe("toBaseN", function() {
   const tests = [
@@ -34,7 +35,7 @@ describe("toBaseN", function() {
 describe("ShortIdDate", function() {
   const shortIdParams: ShortIdParams = {
     epochYear: 2025,
-    yearChars: 'ABC',
+    yearChars: BASE26_DIGITS,
     monthChars: BASE36_DIGITS,
     dayChars: BASE36_DIGITS,
   };
