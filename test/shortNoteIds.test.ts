@@ -1,5 +1,5 @@
 import * as assert from "node:assert";
-import { toBaseN, ShortIdDate, ShortIdParams, BASE36_CHARS } from "../shortNoteIds.js";
+import { toBaseN, ShortIdDate, ShortIdParams } from "../shortNoteIds.js";
 
 const BASE2_DIGITS_AB = 'AB';
 const BASE4_DIGITS = '0123';
@@ -35,8 +35,8 @@ describe("ShortIdDate", function() {
   const shortIdParams: ShortIdParams = {
     epochYear: 2025,
     yearChars: 'ABC',
-    monthChars: BASE36_CHARS,
-    dayChars: BASE36_CHARS,
+    monthChars: BASE36_DIGITS,
+    dayChars: BASE36_DIGITS,
   };
 
   describe("ShortIdDate - 2025-01-01 midnight", function() {
