@@ -64,6 +64,10 @@ class _ShortIdExpected {
   public get timePart(): string {
     return this.hour + this.minute;
   }
+
+  public toString(): string {
+    return this.datePart + this.timePart;
+  }
 };
 
 function testShortIdDate(shortIdParams: ShortIdParams, date: Date, expected: _ShortIdExpected) {
@@ -110,6 +114,12 @@ function testShortIdDate(shortIdParams: ShortIdParams, date: Date, expected: _Sh
       assert.equal(shortId.timePart(), expected.timePart);
     });
   });
+
+  describe("#toString()", function() {
+    it(`is "${expected.toString()}`, function() {
+      assert.equal(shortId.toString(), expected.toString());
+    })
+  })
 }
 
 describe("ShortIdDate", function() {

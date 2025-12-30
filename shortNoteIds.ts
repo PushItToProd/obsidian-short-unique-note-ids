@@ -119,4 +119,8 @@ export class ShortIdDate {
   timePart(): string {
     return `${this.hour()}${this.minute()}`;
   }
+
+  toString(): string {
+    return `${this.datePart()}${this.timePart()}`
+  }
 }
